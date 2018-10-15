@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Choice Selection</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+    <script src="../alljs/studentjs.js"></script>
+
+    <script src="../alljs/cookies.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-group"></div>
+        <div class="well">
+            <h1>Choice Selection</h1>
+        </div>
+        <hr>
+        <div class="well">
+            <h5 id="user_id_display" style="color: blue">
+                <script type="text/javascript">
+                    document.getElementById("user_id_display").innerHTML = "Student ID : " + getcookie("std_id");
+                </script>
+            </h5>
+            <hr>
+        </div>
+        <div class="well">
+            <h5 id="user_rank" style="color: blue">
+                <script type="text/javascript">
+                    document.getElementById("user_rank").innerHTML = "Student Rank : " + getcookie("std_rank");
+                </script>
+            </h5>
+            <hr>
+        </div>
+        <div class="well">
+            <h5 id="user_marks" style="color: blue">
+                <script type="text/javascript">
+                    document.getElementById("user_marks").innerHTML = "Student Marks : " + getcookie("std_marks");
+                </script>
+            </h5>
+            <hr>
+        </div>
+        <div class="table-responsive">
+            <table class="table" id="m_table">
+                <thead>
+                    <tr>
+                        <th>Choice</th>
+                        <th>College</th>
+                        <th>Branch</th>
+                    </tr>
+                </thead>
+                <tbody id="m_tbody">
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="well">
+            <hr>
+            <hr>
+            <center>
+                <button type="button" class="btn btn-primary" onclick="onClickSubmitButton()">Submit</button>
+            </center>
+
+        </div>
+
+        <div class="well">
+            <hr>
+            <hr>
+
+            <button type="button" class="btn btn-danger" onclick="logOut()">Log Out</button>
+
+
+        </div>
+
+    </div>
+
+
+
+    <script type="text/javascript">
+
+
+        if (!localStorage.getItem("session")) {
+            // if (confirm("Are you " + localStorage.getItem("userName") +"?")) {
+            // 	// Session Confirmed
+            // 	console.log("\nUser is Logged already in\n\n");
+            // window.location="../../Home/home.html";
+            // } else {
+            // 	// Session Logout
+            // 	localStorage.clear();
+            // 	console.log("\nUser Logged out\n");
+            // 	window.location="../../login/View/login.html";
+            // }
+
+            console.log("\nUser is not Logged already in\n\n");
+            window.location = "../Login/login.html";
+        }
+
+
+
+        var site_host = "http://localhost/";
+        var number_of_rows_to_insert = 5;
+
+
+        var std_id = getcookie("std_id");
+        console.log("stdID : " + std_id);
+
+        var m_table = document.getElementById("m_table");
+        var m_tbody = document.getElementById("m_tbody");
+
+
+        var colleges_array = ["none"];
+        var branch_array = [];
+
+        getColleges();
+
+
+
+        function populateCollegesIntoDropDown() {
+
+            console.log(colleges_array);
+
+            var row_id = 1;
+            var branch_choice_array = ["Select College First"];
+            var college_choice_array = colleges_array;
+
+            for (var row_looper = 0; row_looper < number_of_rows_to_insert; row_looper++) {
+
+                var select_html = '<select name="branch" id="branch_selector_' + row_id + '">';
+
+                for (var i = 0; i < branch_choice_array.length; i++) {
+                    select_html = select_html + '<option value="' + branch_choice_array[i] + '">' + branch_choice_array[i] + '</option>';
+                }
+
+                select_html = select_html + '</select>';
+
+                var select_college_html = '<select name="college" id="college_selector_' + row_id + '" onchange="college_selector_onChange(this)">';
+
+                for (var i = 0; i < college_choice_array.length; i++) {
+                    select_college_html = select_college_html + '<option value="' + college_choice_array[i] + '">' + college_choice_array[i] + '</option>';
+                }
+
+                select_college_html = select_college_html + '</select>';
+
+                var row_html = '<tr>' +
+                    '<td>' + row_id + '</td>' +
+                    '<td>' +
+                    select_college_html +
+                    '</td>' +
+                    '<td>' +
+                    select_html +
+                    '</td>' +
+                    '</tr>';
+
+                m_tbody.insertAdjacentHTML("beforeend", row_html);
+
+                var disable_branch_selector = document.getElementById("branch_selector_" + row_id);
+                disable_branch_selector.disabled = true;
+
+                var college_selector_element = document.getElementById("college_selector_" + row_id);
+
+                row_id++;
+            }
+
+        }
+
+        function college_selector_onChange(e) {
+            console.log(e.value);
+            console.log(e.id);
+
+            var toPopulateDropDownID = e.id.toString().replace("college_selector_", "branch_selector_");
+            console.log(toPopulateDropDownID);
+            getBranches(e.value, toPopulateDropDownID);
+
+
+        }
+
+        function populateBranchNames(id_to_populate) {
+            console.log("populateBranchNames id : " + id_to_populate);
+
+            var populate_dropdown_element = document.getElementById(id_to_populate);
+            populate_dropdown_element.options.length = 0;
+            for (index in branch_array) {
+                populate_dropdown_element.options[populate_dropdown_element.options.length] = new Option(branch_array[index], branch_array[index]);
+            }
+            populate_dropdown_element.disabled = false;
+
+        }
+
+        function onClickSubmitButton() {
+            console.log("onClickSubmitButton");
+
+            var select_validation = true;
+
+            for (var i = 0; i < number_of_rows_to_insert; i++) {
+                var college_selected = document.getElementById("college_selector_" + (i + 1));
+                var branch_selected = document.getElementById("branch_selector_" + (i + 1));
+
+                if (college_selected.value == "none" || college_selected.value == "None" || college_selected.value == null) {
+                    select_validation = false;
+                    alert("Invalid College Selected");
+                    return;
+                }
+                if (branch_selected.value == "Select College First" || branch_selected.value == null) {
+                    select_validation = false;
+                    alert("Invalid College Selected");
+                    return;
+                }
+            }
+
+            if (select_validation == false) {
+                return;
+            }
+
+            // Now all validated
+
+            var postData = new Object();
+
+
+            for (var i = 0; i < number_of_rows_to_insert; i++) {
+                var college_selected = document.getElementById("college_selector_" + (i + 1));
+                var branch_selected = document.getElementById("branch_selector_" + (i + 1));
+
+                postData[i + 1] = {
+                    "college_name": college_selected.value,
+                    "branch_name": branch_selected.value
+                };
+                var pref_tag = i + 1;
+
+
+
+            }
+
+            console.log(postData);
+
+
+            $.post(site_host + "/SD/webAPI/addChoice.php", { std_id: std_id, choice_json: postData })
+                .done(function (data) {
+                    console.log(data);
+                    var data_json = JSON.parse(data);
+
+                    console.log(data_json);
+
+
+                    if (data_json.success == "true") {
+                        console.log("success : " + data_json.success);
+
+                        window.location = "./choice_selected.html";
+
+                    } else {
+                        alert(data_json.error)
+                        console.log("success : " + data_json.success);
+                        console.log("error : " + data_json.error);
+                    }
+                });
+
+
+        }
+
+        $.post(site_host + "/SD/webAPI/isChoiceSelected.php", { std_id: std_id })
+            .done(function (data) {
+                console.log(data);
+                var data_json = JSON.parse(data);
+
+                if (data_json.success == "true") {
+                    console.log("success : " + data_json.success);
+                    if (data_json.choice_selected == "true") {
+                        m_table.innerHTML = '<div class="well"><h5>You have Selected all your 5 choices.</h5 ><hr></div>';
+                        window.location = "./choice_selected.html";
+                    } else {
+                        console.log("User can fill selection");
+                    }
+
+                } else {
+                    console.log("success : " + data_json.success);
+                    console.log("error : " + data_json.error);
+                }
+            });
+
+    </script>
+
+
+
+</body>
+
+</html>

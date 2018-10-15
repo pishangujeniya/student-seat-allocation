@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Choice Selection</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+
+    <script src="../alljs/studentjs.js"></script>
+
+    <script src="../alljs/cookies.js"></script>
+
+</head>
+
+<body>
+    <script type="text/javascript">
+        function redirect(path) {
+            window.location = path;
+        }
+
+    </script>
+    <div class="container">
+
+        <div class="well">
+            <h1>Results</h1>
+        </div>
+        <hr>
+        <div class="well">
+            <h5 id="user_id_display" style="color: green">
+                Results are out now.
+            </h5>
+            <hr>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table" id="m_table">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Student Name</th>
+                        <th>College Name</th>
+                        <th>Branch Name</th>
+                        <th>College City</th>
+                    </tr>
+                </thead>
+                <tbody id="m_tbody">
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="well">
+            <hr>
+            <hr>
+            <button type="button" class="btn btn-danger" onclick="logOut()">Log Out</button>
+        </div>
+
+
+    </div>
+
+
+
+    <script type="text/javascript">
+
+        $.post("http://localhost/" + "SD/webAPI/getResults.php", { std_id: getcookie("std_id") })
+            .done(function (data) {
+                var data_json = JSON.parse(data);
+                if (data_json.success == "true") {
+                    console.log("success : " + data_json.success);
+                    all_clip_data = data_json;
+                    var count = 0;
+                    while (true) {
+                        try {
+                            var n_branch_name = data_json[count].branch_name;
+                            var n_college_name = data_json[count].college_name;
+                            var n_college_city = data_json[count].college_city;
+                            var n_std_name = data_json[count].std_name;
+                            var n_std_id = data_json[count].std_id;
+
+                            MyaddRow(n_std_id, n_std_name, n_college_name, n_branch_name, n_college_city);
+
+                            count++;
+
+                        } catch (e) {
+                            return;
+                        }
+                    }
+                    count = 0;
+
+                } else {
+                    document.getElementById("user_id_display").innerText = "Results will be declared here";
+                    console.log("success : " + data_json.success);
+                    console.log("error : " + data_json.error);
+                }
+            });
+
+
+        function MyaddRow(std_id, std_name, college_name, branch_name, college_city) {
+            var row_html = '<tr>' +
+                '<td>' + std_id + '</td>' +
+                '<td>' + std_name + '</td>' +
+                '<td>' + college_name + '</td>' +
+                '<td>' + branch_name + '</td>' +
+                '<td>' + college_city + '</td>' +
+                '</tr>';
+
+            m_tbody.insertAdjacentHTML("beforeend", row_html);
+        }
+
+    </script>
+
+</body>
+
+</html>

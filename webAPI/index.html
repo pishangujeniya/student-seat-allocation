@@ -1,0 +1,123 @@
+<html>
+
+<head>
+    <title>API Documentation</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body class="container">
+    <div class="table-responsive">
+        <table class="table" id="m_table">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Link</th>
+                    <th>Parameters</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody id="m_tbody">
+                <tr>
+                    <td>config.php</td>
+                    <td>
+                        <a href="http://localhost/SD/webAPI/config.php">config.php</a>
+                    </td>
+                    <td>no Parameters</td>
+                    <td>for single file import database credentials</td>
+                </tr>
+                <tr>
+                    <td>getColleges.php</td>
+                    <td>
+                        <a href="http://localhost/SD/webAPI/getColleges.php">getColleges.php</a>
+                    </td>
+                    <td>no Parameters</td>
+                    <td>Retrieve all COlleges names</td>
+                </tr>
+                <tr>
+                    <td>getBranches.php</td>
+                    <td>
+                        <a href="http://localhost/SD/webAPI/getBranches.php">getBranches.php</a>
+                    </td>
+                    <td>college_name</td>
+                    <td>get Branches of Respetive college </td>
+                </tr>
+                <tr>
+                    <td>addChoice.php</td>
+                    <td>
+                        <a href="http://localhost/SD/webAPI/addChoice.php">addChoice.php</a>
+                    </td>
+                    <td>choice_json</td>
+                    <td>Inserts at max 5 choices with preference as per choice_json</td>
+                </tr>
+                <tr>
+                    <td>isChoiceSelected.php</td>
+                    <td>
+                        <a href="http://localhost/SD/webAPI/isChoiceSelected.php">isChoiceSelected.php</a>
+                    </td>
+                    <td>std_id</td>
+                    <td>returns true if user has selected maximum 5 choices</td>
+                </tr>
+                <tr>
+                    <td>LogIn.php</td>
+                    <td>
+                        <a href="http://localhost/SD/webAPI/LogIn.php">LogIn.php</a>
+                    </td>
+                    <td>std_id,std_password</td>
+                    <td>returns true with std_id, std_marks, std_name, std_rank</td>
+                </tr>
+                <tr>
+                    <td>SignUp.php</td>
+                    <td>
+                        <a href="http://localhost/SD/webAPI/SignUp.php">SignUp.php</a>
+                    </td>
+                    <td>no Parameters</td>
+                    <td>for single file import database credentials</td>
+                </tr>
+                <tr>
+                    <td>allocate.php</td>
+                    <td>
+                        <a href="http://localhost/SD/webAPI/allocate.php">allocate.php</a>
+                    </td>
+                    <td>std_name, std_marks,std_password</td>
+                    <td>returns true with std_id</td>
+                </tr>
+
+                <tr>
+                    <td>getResults.php</td>
+                    <td>
+                        <a href="http://localhost/SD/webAPI/getResults.php">getResults.php</a>
+                    </td>
+                    <td>no Parameters</td>
+                    <td>outputs json for allocated data</td>
+                </tr>
+
+
+                <tr>
+                    <td>resetSeats.php</td>
+                    <td>
+                        <a href="http://localhost/SD/webAPI/resetSeats.php">resetSeats.php</a>
+                    </td>
+                    <td>no Parameters</td>
+                    <td>resets all seats_available value in branch table</td>
+                </tr>
+
+                <tr>
+                    <td>rank_generator.php</td>
+                    <td>
+                        <a href="http://localhost/SD/webAPI/rank_generator.php">rank_generator.php</a>
+                    </td>
+                    <td>no Parameters</td>
+                    <td>updates ranks of all students depending upon  thier marks</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
